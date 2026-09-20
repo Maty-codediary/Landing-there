@@ -1227,6 +1227,7 @@
   <!-- ===== Custom checklist ===== -->
 </div>
 
+<script src="config.js"></script>
 <script>
 const I18N = {
   en:{
@@ -3706,7 +3707,8 @@ function srcChips(sources){
   return (sources || []).filter(s => s && /^https?:\/\//.test(s.url)).map(s => {
     let host = '';
     try { host = new URL(s.url).hostname.replace(/^www\./, ''); } catch (e){}
-    return `<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" title="${esc(s.title || host)}">${esc(host || s.title || 'source')}</a>`;
+    const shown = /vertexaisearch|googleusercontent/.test(host) ? (s.label || s.title || 'source') : (host || s.label || s.title || 'source');
+    return `<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" title="${esc(s.title || host)}">${esc(shown)}</a>`;
   }).join('');
 }
 
@@ -4298,9 +4300,11 @@ document.getElementById('aggChkBackBtn').addEventListener('click', openTripsHub)
 // =====================================================================
 const CONFIG = {
   CONTACT_EMAIL: "",      // your team inbox: used as a fallback if the form endpoint is unreachable
+  WEB3FORMS_KEY: "",      // optional free alternative to Netlify Forms (web3forms.com access key)
   FORM_ENDPOINT: "/",     // Netlify Forms posts to the site root
   PANDA_ENDPOINT: "/api/panda"  // serverless function that powers Panda Live
 };
+Object.assign(CONFIG, window.LT_CONFIG || {});   // values from config.js override the defaults above
 const STORE_KEY = 'landingthere_v1';
 
 function esc(s){
@@ -4558,6 +4562,7 @@ document.getElementById('stPreviewBtn').addEventListener('click', () => {
 });
 
 // ---------- Lead capture (Netlify Forms, with fallbacks) ----------
+let lastLeadError = '';
 async function submitLead(fields){
   try {
     const leads = JSON.parse(localStorage.getItem('lt_leads') || '[]');
@@ -4565,6 +4570,19 @@ async function submitLead(fields){
     localStorage.setItem('lt_leads', JSON.stringify(leads));
   } catch (e){}
   if (location.protocol === 'file:') return 'local';
+  lastLeadError = '';
+  if (CONFIG.WEB3FORMS_KEY){
+    try {
+      const r = await fetch('https://api.web3forms.com/submit', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
+        body: JSON.stringify({ ...fields, access_key: CONFIG.WEB3FORMS_KEY, subject: 'Landing There: ' + (fields['form-name'] || 'contact') })
+      });
+      const j = await r.json().catch(() => ({}));
+      if (r.ok && j.success) return 'sent';
+      lastLeadError = 'web3forms ' + r.status;
+    } catch (e){ lastLeadError = 'web3forms network'; }
+  }
   try {
     const r = await fetch(CONFIG.FORM_ENDPOINT, {
       method:'POST',
@@ -4572,7 +4590,9 @@ async function submitLead(fields){
       body:new URLSearchParams(fields).toString()
     });
     if (r.ok) return 'sent';
-  } catch (e){}
+    lastLeadError = (lastLeadError ? lastLeadError + '; ' : '') + 'netlify ' + r.status;
+  } catch (e){ lastLeadError = (lastLeadError ? lastLeadError + '; ' : '') + 'netlify network'; }
+  console.warn('Lead not sent:', lastLeadError);
   if (CONFIG.CONTACT_EMAIL){
     const body = Object.entries(fields).map(([k, v]) => `${k}: ${v}`).join('\n');
     window.location.href = `mailto:${CONFIG.CONTACT_EMAIL}?subject=${encodeURIComponent('Landing There: ' + (fields['form-name'] || 'contact'))}&body=${encodeURIComponent(body)}`;
@@ -4597,7 +4617,7 @@ function wireLeadForm(formId, msgId, okText){
     } else if (res === 'local'){
       msg.className = 'lead-msg ok'; msg.textContent = 'Saved on this device (demo mode). Host the app online to receive submissions.'; form.reset();
     } else {
-      msg.className = 'lead-msg warn'; msg.textContent = 'We could not send that. Check your connection and try again.';
+      msg.className = 'lead-msg warn'; msg.textContent = 'We could not send that. Please try again in a minute' + (CONFIG.CONTACT_EMAIL ? ' or email ' + CONFIG.CONTACT_EMAIL : '') + '.' + (/[?&]debug/.test(location.search) ? ' [' + lastLeadError + ']' : '');
     }
   });
 }
