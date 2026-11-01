@@ -4,7 +4,7 @@
 
 Live demo: **https://landingthere.netlify.app/**
 
-Landing There turns a passport, a destination and a purpose into a personal arrival checklist — visa rules, SIM, housing, payments, first days on the ground, and key deadlines. It's free for travelers, and organizations that relocate people (universities, relocation agencies, mobility teams) can generate a branded version of the checklist for their own clients.
+Landing There turns a passport, a destination and a purpose into a personal arrival checklist, visa rules, SIM, housing, payments, first days on the ground, and key deadlines. It's free for travelers, and organizations that relocate people (universities, relocation agencies, mobility teams) can generate a branded version of the checklist for their own clients.
 
 Built for the Innovation & Entrepreneurship course at Audencia Business School and École Centrale Nantes.
 
@@ -12,7 +12,7 @@ Built for the Innovation & Entrepreneurship course at Audencia Business School a
 
 ## The problem
 
-Moving abroad means re-solving the same admin puzzle every time: visa rules on one site, housing advice on another, payment tips on a forum — and the rules change depending on your own passport, not just the destination. Organizations that relocate people (international offices, agencies, mobility teams) end up answering the same questions for every new person they send.
+Moving abroad means re-solving the same admin puzzle every time: visa rules on one site, housing advice on another, payment tips on a forum, and the rules change depending on your own passport, not just the destination. Organizations that relocate people (international offices, agencies, mobility teams) end up answering the same questions for every new person they send.
 
 ## What it does
 
@@ -25,7 +25,7 @@ Moving abroad means re-solving the same admin puzzle every time: visa rules on o
 
 **For organizations — Partner Studio**
 - Generate a client-specific link carrying the organization's name, brand color and its own steps (e.g. "book your orientation call"), layered on top of the standard checklist
-- No account needed on the client's side, and no database on ours — the entire configuration is encoded directly into the link itself
+- No account needed on the client's side, and no database on ours, the entire configuration is encoded directly into the link itself
 - Free 30-day pilot for up to 10 users, then paid tiers for larger cohorts
 
 ## Tech stack
