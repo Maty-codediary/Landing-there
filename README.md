@@ -51,12 +51,12 @@ netlify.toml                      Netlify build/function configuration
 
 ## What we tested
 
-Before writing a line of pricing, we ran structured interviews and pricing surveys with 10 people across three segments — individual travelers, university international-office staff, and relocation/mobility professionals. The original price (a flat CNY 149 and a 100-user institutional minimum) was rejected by most participants, so we rebuilt the offer: a lower individual price, a smaller 10-user pilot, and fixed annual tiers instead of a per-seat minimum. The product was also checked with 50+ automated end-to-end tests covering destination search, checklist completion, and the Partner Studio flow.
+Before writing a line of pricing, we ran structured interviews and pricing surveys with 10 people across three segments, individual travelers, university international-office staff, and relocation/mobility professionals. The original price (a flat CNY 149 and a 100-user institutional minimum) was rejected by most participants, so we rebuilt the offer: a lower individual price, a smaller 10-user pilot, and fixed annual tiers instead of a per-seat minimum. The product was also checked with 50+ automated end-to-end tests covering destination search, checklist completion, and the Partner Studio flow.
 
 ## Current limitations
 
 - Only 18 destinations have hand-written, verified guides; the rest rely on general country data plus Panda's live search, which isn't always available
-- No real user accounts or database yet — trip data lives in the browser, and partner links carry their configuration in the URL itself
+- No real user accounts or database yet, trip data lives in the browser, and partner links carry their configuration in the URL itself
 - No institutional pilot has run to completion yet, so pricing and unit economics are still estimates, not proven numbers
 
 ## Team
